@@ -310,14 +310,14 @@
                     </a>
                   </li>
                 @endif
-                @if (auth('user')->user()->has_permission('read-categories'))
+                <!-- @if (auth('user')->user()->has_permission('read-categories'))
                   <li class="nav-item">
                     <a href="{{route('dashboard.categories.index')}}" class="nav-link {{(request()->routeIs('dashboard.categories.*'))? 'active':''}}">
                       <i class="far fa-circle nav-icon"></i>
                       <p>{{ trans('admin.Categories') }}</p>
                     </a>
                   </li>
-                @endif
+                @endif -->
 
                 @if (auth('user')->user()->has_permission('read-units'))
                   <li class="nav-item">
@@ -328,23 +328,23 @@
                   </li>
                 @endif
                 
-                @if (auth('user')->user()->has_permission('read-brands'))
+                <!-- @if (auth('user')->user()->has_permission('read-brands'))
                   <li class="nav-item">
                     <a href="{{route('dashboard.brands.index')}}" class="nav-link {{(request()->routeIs('dashboard.brands.*'))? 'active':''}}">
                       <i class="far fa-circle nav-icon"></i>
                       <p>{{ trans('admin.brands') }}</p>
                     </a>
                   </li>
-                @endif
+                @endif -->
 
-                @if (auth('user')->user()->has_permission('read-activityTypes'))
+                <!-- @if (auth('user')->user()->has_permission('read-activityTypes'))
                   <li class="nav-item">
                     <a href="{{route('dashboard.activityTypes.index')}}" class="nav-link {{(request()->routeIs('dashboard.activityTypes.*'))? 'active':''}}">
                       <i class="far fa-circle nav-icon"></i>
                       <p>{{ trans('admin.activityTypes') }}</p>
                     </a>
                   </li>
-                @endif
+                @endif -->
                 @if (auth('user')->user()->has_permission('read-branchs'))
                   <li class="nav-item">
                     <a href="{{route('dashboard.branchs.index')}}" class="nav-link {{(request()->routeIs('dashboard.branchs.*'))? 'active':''}}">
@@ -354,14 +354,14 @@
                   </li>
                 @endif
 
-                @if (auth('user')->user()->has_permission('read-sales-segments'))
+                <!-- @if (auth('user')->user()->has_permission('read-sales-segments'))
                   <li class="nav-item">
                     <a href="{{route('dashboard.sales-segments.index')}}" class="nav-link {{(request()->routeIs('dashboard.sales-segments.*'))? 'active':''}}">
                       <i class="far fa-circle nav-icon"></i>
                       <p>{{ trans('admin.sales_segments') }}</p>
                     </a>
                   </li>
-                @endif
+                @endif -->
               </ul>
             </li>
           @endif
