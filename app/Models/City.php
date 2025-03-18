@@ -12,8 +12,6 @@ class City extends Model
     protected $table = 'cities';
     public $guarded = [];
 
-
-
     public function contacts()
     {
         return $this->hasMany(Contact::class);
@@ -24,7 +22,12 @@ class City extends Model
         return $this->belongsTo(Governorate::class, 'governorate_id');
     }
 
-    public function branches(){
+    public function villages()
+    {
+        return $this->hasMany(Village::class);
+    }
+    public function branches()
+    {
         return $this->belongsToMany(Branch::class, 'city_branch', 'city_id', 'branch_id');
     }
 }

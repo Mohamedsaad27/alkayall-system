@@ -97,7 +97,7 @@ class ReportController extends Controller
             ->unique()
             ->values();
         if ($request->ajax()) {
-            $transactions = TransactionSellLine::with('Product', 'Transaction')->select('transactions_sell_lines.*');
+            $transactions = Transaction::where('type', 'sell')->get();
 
             if ($request->branch_id) {
                 $transactions->whereHas('transaction', function ($query) use ($request) {
@@ -128,26 +128,14 @@ class ReportController extends Controller
                 $transactions->where('created_by', $request->created_by);
             }
             return DataTables::of($transactions)
-                ->addColumn('sku', function ($transactions) {
-                    return $transactions->product->sku ?? '';
-                })
-                ->addColumn('product_name', function ($transactions) {
-                    return $transactions->product->name;
+                ->addColumn('ref_no', function ($transactions) {
+                    return $transactions?->ref_no;
                 })
                 ->addColumn('contact_name', function ($transactions) {
-                    return $transactions->transaction->contact->name;
-                })
-                ->addColumn('ref_no', function ($transactions) {
-                    return $transactions->transaction->ref_no;
+                    return $transactions->contact->name;
                 })
                 ->addColumn('date', function ($transactions) {
                     return $transactions->created_at->format('Y-m-d');
-                })
-                ->addColumn('quantity', function ($transactions) {
-                    return $transactions->quantity;
-                })
-                ->addColumn('unit_price', function ($transactions) {
-                    return $transactions->unit_price;
                 })
                 ->addColumn('total', function ($transactions) {
                     return $transactions->final_price;

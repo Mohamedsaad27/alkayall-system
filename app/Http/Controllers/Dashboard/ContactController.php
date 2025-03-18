@@ -13,6 +13,7 @@ use App\Models\SalesSegment;
 use App\Models\Setting;
 use App\Models\Transaction;
 use App\Models\User;
+use App\Models\Village;
 use App\Notifications\ContactNotification;
 use App\Services\ActivityLogsService;
 use App\Services\PaymentTransactionService;
@@ -147,10 +148,11 @@ class ContactController extends Controller
         $activityTypes = ActivityType::all();
         $salesSegments = SalesSegment::all();
         $governorates = Governorate::get();
+        $villages = Village::all();
         $cities = [];
         $users = User::all();
         $usersIds = [];
-        return view('Dashboard.contacts.create', compact('salesSegments', 'settings', 'governorates', 'cities', 'activityTypes', 'users', 'usersIds'));
+        return view('Dashboard.contacts.create', compact('salesSegments', 'settings', 'governorates', 'villages', 'cities', 'activityTypes', 'users', 'usersIds'));
     }
 
     public function store(Request $request)
@@ -162,13 +164,14 @@ class ContactController extends Controller
                 'phone' => 'required|string|max:20',
                 'type' => 'required|in:supplier,customer',
                 'address' => 'required|string|max:255',
-                'activity_type_id' => 'nullable|exists:activity_types,id',
+                // 'activity_type_id' => 'nullable|exists:activity_types,id',
                 'credit_limit' => 'nullable|numeric',
                 'opening_balance' => 'nullable|numeric',
-                'sales_segment_id' => 'nullable|exists:sales_segments,id',
+                // 'sales_segment_id' => 'nullable|exists:sales_segments,id',
                 'governorate_id' => 'required|exists:governorates,id',
                 'city_id' => 'required|exists:cities,id',
-                'user_ids' => 'nullable|exists:users,id'
+                'village_id' => 'nullable|exists:villages,id',
+                // 'user_ids' => 'nullable|exists:users,id'
             ]);
 
             $request->merge(['is_active' => $request->get('is_active', 0)]);
@@ -177,18 +180,19 @@ class ContactController extends Controller
                 'name' => $validatedData['name'],
                 'phone' => $validatedData['phone'],
                 'address' => $validatedData['address'],
-                'activity_type_id' => $validatedData['activity_type_id'],
+                // 'activity_type_id' => $validatedData['activity_type_id'],
                 'type' => $validatedData['type'],
                 'credit_limit' => $validatedData['credit_limit'],
-                'sales_segment_id' => $validatedData['sales_segment_id'],
+                // 'sales_segment_id' => $validatedData['sales_segment_id'],
                 'governorate_id' => $validatedData['governorate_id'],
                 'city_id' => $validatedData['city_id'],
+                'village_id' => $validatedData['village_id'],
                 'is_active' => $request->is_active,
                 'opening_balance' => $validatedData['opening_balance'] ?? 0,
                 'balance' => $validatedData['opening_balance'] ?? 0,
             ]);
 
-            $contact->users()->attach($request->user_ids);
+            // $contact->users()->attach($request->user_ids);
 
             if ($request->opening_balance != 0) {
                 $status = '';
@@ -260,6 +264,7 @@ class ContactController extends Controller
         $contact = Contact::findOrFail($id);
         $salesSegments = SalesSegment::all();
         $governorates = Governorate::get();
+        $villages = Village::all();
         $settings = Setting::first();
         $users = User::all();
         $cities = [];
@@ -269,6 +274,7 @@ class ContactController extends Controller
             'salesSegments' => $salesSegments,
             'governorates' => $governorates,
             'cities' => $cities,
+            'villages' => $villages,
             'settings' => $settings,
             'activityTypes' => $activityTypes,
             'users' => $users,
@@ -290,6 +296,7 @@ class ContactController extends Controller
             'sales_segment_id' => 'nullable|exists:sales_segments,id',
             'governorate_id' => 'required|exists:governorates,id',
             'city_id' => 'required|exists:cities,id',
+            'village_id' => 'nullable|exists:villages,id',
             'opening_balance' => 'nullable|numeric',
         ], [
             'name.required' => 'يجب أن يكون اسم العميل أو المورد موجود',

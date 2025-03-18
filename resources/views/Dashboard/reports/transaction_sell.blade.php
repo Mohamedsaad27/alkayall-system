@@ -36,10 +36,10 @@
             <div class="card-body">
                 <div class="col-lg-612">
                     <?php
-                        $branchescollection = collect($branches)->pluck('name', 'id');
-                        $categoryCollection = collect($categories)->pluck('name', 'id');
-                        $usersCollection = collect($users)->pluck('name', 'id');
-                        $contactsCollection = collect($contacts)->pluck('name', 'id');
+                    $branchescollection = collect($branches)->pluck('name', 'id');
+                    $categoryCollection = collect($categories)->pluck('name', 'id');
+                    $usersCollection = collect($users)->pluck('name', 'id');
+                    $contactsCollection = collect($contacts)->pluck('name', 'id');
                     ?>
                     <div class="row">
                         <div class="col-lg-6">
@@ -128,13 +128,9 @@
                         <table id="transaction-table"  class="table table-bordered table-striped">
                         <thead>
                         <tr>
-                            <th>SKU</th>
-                            <th>{{ trans('admin.product_name') }}</th>
-                            <th>{{ trans('admin.contact') }}</th>
                             <th>{{ trans('admin.ref_no') }}</th>
+                            <th>{{ trans('admin.contact') }}</th>
                             <th>{{ trans('admin.date') }}</th>
-                            <th>{{ trans('admin.quantity') }}</th>
-                            <th>{{ trans('admin.unit_price') }}</th>
                             <th>{{ trans('admin.total') }}</th>
                         </tr>
                         </thead>
@@ -174,13 +170,9 @@
                 } 
             } ,
             columns: [
-                { data: 'sku', name: 'sku' },
-                { data: 'product_name', name: 'product_name' },
-                { data: 'contact_name', name: 'contact_name' },
                 { data: 'ref_no', name: 'ref_no' },
+                { data: 'contact_name', name: 'contact_name' },
                 { data: 'date', name: 'date' },
-                { data: 'quantity', name: 'quantity' },
-                { data: 'unit_price', name: 'unit_price' },
                 { data: 'total', name: 'total' }
             ]    , dom: 'lBfrtip'
             ,buttons: [

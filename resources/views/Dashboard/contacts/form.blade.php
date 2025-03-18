@@ -29,7 +29,7 @@
                 <span class="invalid-feedback">{{ $message }}</span>
             @enderror
         </div>
-        <div class="col-lg-4" >
+        <!-- <div class="col-lg-4" >
             @include('components.form.select', [
                 'collection' => $activityTypes,
                 'index' => 'id',
@@ -40,7 +40,7 @@
                 'label' => trans('admin.activityType'),
                 'class' => 'form-control select2',
             ])
-        </div>
+        </div> -->
         @error('activity_type_id')
             <span class="invalid-feedback">{{ $message }}</span>
         @enderror
@@ -77,6 +77,21 @@
                 <span class="invalid-feedback">{{ $message }}</span>
             @enderror
         </div>
+        <div class="col-lg-4" >
+            @include('components.form.select', [
+                'collection' => $villages,
+                'index' => 'id',
+                'id' => 'village_id',
+                'select' => isset($data) ? $data->village_id : old('village_id'),
+                'name' => 'village_id',
+                'display' => app()->getLocale() == "ar" ? "name_ar" : "name_en",
+                'label' => trans('admin.village'),
+                'class' => 'form-control select2',
+            ])
+            @error('village_id')
+                <span class="invalid-feedback">{{ $message }}</span>
+            @enderror
+        </div>
         <div class="col-lg-4">
             <x-form.input type="number" class="form-control" 
 
@@ -86,10 +101,10 @@
                 <span class="invalid-feedback">{{ $message }}</span>
             @enderror
         </div>
-        <div class="col-lg-4">
+        <!-- <div class="col-lg-4">
         <x-form.multiple-select class="form-control select2 "  id="" :collection="$users" :selectArr="$usersIds"
         index="id" name="user_ids[]" label="{{ trans('admin.specific_users') }}" display="name" />
-        </div>
+        </div> -->
         @php
             $defaultCreditLimit = $settings->default_credit_limit;
         @endphp
@@ -161,6 +176,42 @@
                     error: function(xhr, status, error) {
                         console.error(xhr);
                         alert('An error occurred while fetching cities. Please try again.');
+                    }
+                });
+            }
+        });
+    });
+</script>
+<script>
+    $(document).ready(function() {
+        $('#cities_dropdown').change(function() {
+            var city_id = $(this).val(); // Get the selected city ID
+            var villagesDropdown = $('#village_id'); // Get the villages dropdown element
+            let appLocale = "{{ app()->getLocale() }}";
+
+            // Clear the villages dropdown
+            villagesDropdown.empty();
+            villagesDropdown.append('<option value="">{{ trans("admin.Select") }}</option>'); // Optional placeholder
+
+            if (city_id) {
+                // Make AJAX request to fetch villages
+                $.ajax({
+                    url: '{{ route("dashboard.villages.getVillagesBasedOnCity") }}', // Update with the correct route
+                    method: 'GET',
+                    data: {
+                        city_id: city_id
+                    },
+                    success: function(data) {
+                        console.log(data);
+                        $.each(data, function(index, village) {
+                            villagesDropdown.append('<option value="' + village.id + '">' + (appLocale === "ar" ? village.name_ar : village.name_en) + '</option>');
+                        });
+
+                        villagesDropdown.select2(); // Reinitialize Select2
+                    },
+                    error: function(xhr, status, error) {
+                        console.error(xhr);
+                        alert('An error occurred while fetching villages. Please try again.');
                     }
                 });
             }

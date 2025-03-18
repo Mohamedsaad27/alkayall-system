@@ -113,8 +113,8 @@
             </li>
           @endif
 
-          @if (auth('user')->user()->has_permission('read-cities') || auth('user')->user()->has_permission('read-governorates'))
-            <li class="nav-item {{(request()->routeIs('dashboard.governorates.*'))? 'menu-open':''}} {{(request()->routeIs('dashboard.cities.*'))? 'menu-open':''}}">
+          @if (auth('user')->user()->has_permission('read-cities') || auth('user')->user()->has_permission('read-governorates') || auth('user')->user()->has_permission('read-villages'))
+            <li class="nav-item {{(request()->routeIs('dashboard.governorates.*'))? 'menu-open':''}} {{(request()->routeIs('dashboard.cities.*'))? 'menu-open':''}} {{(request()->routeIs('dashboard.villages.*'))? 'menu-open':''}}">
               <a href="#" class="nav-link">
                 <i class="fas fa-user"></i>
                 <p>
@@ -139,8 +139,14 @@
                     </a>
                   </li>
                 @endif
-               
-
+                @if (auth('user')->user()->has_permission('read-villages'))
+                  <li class="nav-item">
+                    <a href="{{route('dashboard.villages.index')}}" class="nav-link {{(request()->routeIs('dashboard.villages.*'))? 'active':''}}">
+                      <i class="far fa-circle nav-icon"></i>
+                      <p>{{ trans('admin.villages') }}</p>
+                    </a>
+                  </li>
+                @endif
               </ul>
             </li>
           @endif
@@ -535,19 +541,11 @@
                   </a>
                 </li>
               @endif
-              @if (auth('user')->user()->has_permission('read-activity-logs-activity-logs'))
-              <li class="nav-item">
-                <a href="{{route('dashboard.activity-log.index')}}" class="nav-link {{request()->routeIs('dashboard.activity-log.*')? 'active':''}}">
-                  <i class="nav-icon fas fa-list"></i>
-                  <p>
-                    {{ trans('admin.activity-log') }}
-                  </p>
-                </a>
-                </li>
-              @endif
+             
             </ul>
           </li>
           @endif
+          
           @if (auth('user')->user()->has_permission('read-accounts'))
           <li class="nav-item">
             <a href="{{route('dashboard.accounts.index')}}" class="nav-link {{request()->routeIs('dashboard.accounts.*')? 'active':''}}">
@@ -695,7 +693,16 @@
             </ul>
           </li>
         @endif
-        
+        @if (auth('user')->user()->has_permission('read-activity-logs-activity-logs'))
+              <li class="nav-item">
+                <a href="{{route('dashboard.activity-log.index')}}" class="nav-link {{request()->routeIs('dashboard.activity-log.*')? 'active':''}}">
+                  <i class="nav-icon fas fa-list"></i>
+                  <p>
+                    {{ trans('admin.activity-log') }}
+                  </p>
+                </a>
+                </li>
+              @endif
 
         </ul>
       </nav>
