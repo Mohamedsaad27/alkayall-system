@@ -2,175 +2,164 @@
 
 namespace App\Http\Controllers\Dashboard;
 
-use Carbon\Carbon;
+use App\Http\Controllers\Controller;
 use App\Models\Branch;
 use App\Models\Contact;
 use App\Models\Expense;
 use App\Models\Product;
+use App\Models\ProductBranchDetails;
 use App\Models\SpoiledLine;
 use App\Models\Transaction;
-use Illuminate\Http\Request;
-use App\Http\Controllers\Controller;
-use App\Models\ProductBranchDetails;
-use Illuminate\Support\Facades\Storage;
 use ArielMejiaDev\LarapexCharts\LarapexChart;
-
+use Carbon\Carbon;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 
 class HomeController extends Controller
 {
     public function index(Request $request)
     {
-
         $branches = Branch::get();
-        # Make THE DEFAULT DATE IS TODAY
+        // Make THE DEFAULT DATE IS TODAY
         $date_from = $request->date_from ?? Carbon::now()->format('Y-m-d');
         $date_to = $request->date_to ?? Carbon::now()->format('Y-m-d');
         $date_from = $date_from . ' 00:00:00';
         $date_to = $date_to . ' 23:59:59';
 
-        # Total Sales
+        // Total Sales
         $total_sales_query = Transaction::query();
         if (isset($request->branch_id) && $request->branch_id) {
             $total_sales_query->where('branch_id', $request->branch_id);
         }
-        if ($date_from && $date_to) {
-            $total_sales_query->whereBetween('transaction_date', [$date_from, $date_to]);
-        }
+        // if ($date_from && $date_to) {
+        //     $total_sales_query->whereBetween('transaction_date', [$date_from, $date_to]);
+        // }
         $total_sales = $total_sales_query->where('type', 'sell')->sum('final_price');
 
-        # Total Sales Returns
-
+        // Total Sales Returns
 
         $total_sales_returns_query = Transaction::query();
         if (isset($request->branch_id) && $request->branch_id) {
             $total_sales_returns_query->where('branch_id', $request->branch_id);
         }
-        if ($date_from && $date_to) {
-            $total_sales_returns_query->whereBetween('transaction_date', [$date_from, $date_to]);
-        }
+        // if ($date_from && $date_to) {
+        //     $total_sales_returns_query->whereBetween('transaction_date', [$date_from, $date_to]);
+        // }
         $total_sales_returns = $total_sales_returns_query->where('type', 'sell_return')->sum('final_price');
 
-
-
-
-        # Total Unpaid Sales
+        // Total Unpaid Sales
         $total_unpaid_sales_query = Transaction::query();
         if (isset($request->branch_id) && $request->branch_id) {
             $total_unpaid_sales_query->where('branch_id', $request->branch_id);
         }
-        if ($date_from && $date_to) {
-            $total_unpaid_sales_query->whereBetween('transaction_date', [$date_from, $date_to]);
-        }
+        // if ($date_from && $date_to) {
+        //     $total_unpaid_sales_query->whereBetween('transaction_date', [$date_from, $date_to]);
+        // }
         $total_unpaid_sales = $total_unpaid_sales_query->where('type', 'sell')->where('payment_status', 'due')->sum('final_price');
 
-
-
-        # Total Paid Sales
+        // Total Paid Sales
         $total_paid_sales_query = Transaction::query();
         if (isset($request->branch_id) && $request->branch_id) {
             $total_paid_sales_query->where('branch_id', $request->branch_id);
         }
-        if ($date_from && $date_to) {
-            $total_paid_sales_query->whereBetween('transaction_date', [$date_from, $date_to]);
-        }
+        // if ($date_from && $date_to) {
+        //     $total_paid_sales_query->whereBetween('transaction_date', [$date_from, $date_to]);
+        // }
         $total_paid_sales = $total_paid_sales_query->where('type', 'sell')->where('payment_status', 'final')->sum('final_price');
 
-
-
-        # Total Purchase
+        // Total Purchase
         $totla_purchase_query = Transaction::query();
 
         if (isset($request->branch_id) && $request->branch_id) {
             $totla_purchase_query->where('branch_id', $request->branch_id);
         }
-        if ($date_from && $date_to) {
-            $totla_purchase_query->whereBetween('transaction_date', [$date_from, $date_to]);
-        }
+        // if ($date_from && $date_to) {
+        //     $totla_purchase_query->whereBetween('transaction_date', [$date_from, $date_to]);
+        // }
         $totla_purchase = $totla_purchase_query->where('type', 'purchase')->sum('final_price');
 
         $total_paid_purchase_query = Transaction::query();
         if (isset($request->branch_id) && $request->branch_id) {
             $total_paid_purchase_query->where('branch_id', $request->branch_id);
         }
-        if ($date_from && $date_to) {
-            $total_paid_purchase_query->whereBetween('transaction_date', [$date_from, $date_to]);
-        }
+        // if ($date_from && $date_to) {
+        //     $total_paid_purchase_query->whereBetween('transaction_date', [$date_from, $date_to]);
+        // }
         $total_paid_purchase = $total_paid_purchase_query->where('type', 'purchase')->where('payment_status', 'final')->sum('final_price');
 
-
-
-        # Total Purchase Returns
+        // Total Purchase Returns
         $totla_purchase_returns_query = Transaction::query();
         if (isset($request->branch_id) && $request->branch_id) {
             $totla_purchase_returns_query->where('branch_id', $request->branch_id);
         }
-        if ($date_from && $date_to) {
-            $totla_purchase_returns_query->whereBetween('transaction_date', [$date_from, $date_to]);
-        }
+        // if ($date_from && $date_to) {
+        //     $totla_purchase_returns_query->whereBetween('transaction_date', [$date_from, $date_to]);
+        // }
         $totla_purchase_returns = $totla_purchase_returns_query->where('type', 'purchase_return')->sum('final_price');
 
-        # Total Unpaid Purchase
+        // Total Unpaid Purchase
         $totla_unpaid_purchase_query = Transaction::query();
         if (isset($request->branch_id) && $request->branch_id) {
             $totla_unpaid_purchase_query->where('branch_id', $request->branch_id);
         }
-        if ($date_from && $date_to) {
-            $totla_unpaid_purchase_query->whereBetween('transaction_date', [$date_from, $date_to]);
-        }
+        // if ($date_from && $date_to) {
+        //     $totla_unpaid_purchase_query->whereBetween('transaction_date', [$date_from, $date_to]);
+        // }
         $totla_unpaid_purchase = $totla_unpaid_purchase_query
-            ->where('type', 'purchase')->where('payment_status', 'due')->sum('final_price');
+            ->where('type', 'purchase')
+            ->where('payment_status', 'due')
+            ->sum('final_price');
 
-
-        # Total Partial Purchase
+        // Total Partial Purchase
         $total_partial_purchase = Transaction::query();
         if (isset($request->branch_id) && $request->branch_id) {
             $total_partial_purchase->where('branch_id', $request->branch_id);
         }
-        if ($date_from && $date_to) {
-            $total_partial_purchase->whereBetween('transaction_date', [$date_from, $date_to]);
-        }
+        // if ($date_from && $date_to) {
+        //     $total_partial_purchase->whereBetween('transaction_date', [$date_from, $date_to]);
+        // }
         $total_partial_purchase = $total_partial_purchase->where('type', 'purchase')->where('payment_status', 'partial')->sum('final_price');
 
-        # Total Partial Sell
+        // Total Partial Sell
         $total_partial_sell_query = Transaction::query();
         if (isset($request->branch_id) && $request->branch_id) {
             $total_partial_sell_query->where('branch_id', $request->branch_id);
         }
-        if ($date_from && $date_to) {
-            $total_partial_sell_query->whereBetween('transaction_date', [$date_from, $date_to]);
-        }
+        // if ($date_from && $date_to) {
+        //     $total_partial_sell_query->whereBetween('transaction_date', [$date_from, $date_to]);
+        // }
         $total_partial_sell = $total_partial_sell_query->where('type', 'sell')->where('payment_status', 'partial')->sum('final_price');
 
-        # Total Expenses
+        // Total Expenses
         $total_expenses_query = Expense::query();
         if (isset($request->branch_id) && $request->branch_id) {
             $total_expenses_query->where('branch_id', $request->branch_id);
         }
-        if ($date_from && $date_to) {
-            $total_expenses_query->whereBetween('created_at', [$date_from, $date_to]);
-        }
+        // if ($date_from && $date_to) {
+        //     $total_expenses_query->whereBetween('created_at', [$date_from, $date_to]);
+        // }
         $total_expenses = $total_expenses_query->sum('amount');
 
-        # total Discounts in Sales
+        // total Discounts in Sales
         $total_discount_in_sales_query = Transaction::query();
         if (isset($request->branch_id) && $request->branch_id) {
             $total_discount_in_sales_query->where('branch_id', $request->branch_id);
         }
-        if ($date_from && $date_to) {
-            $total_discount_in_sales_query->whereBetween('transaction_date', [$date_from, $date_to]);
-        }
+        // if ($date_from && $date_to) {
+        //     $total_discount_in_sales_query->whereBetween('transaction_date', [$date_from, $date_to]);
+        // }
         $total_discount_in_sales = $total_discount_in_sales_query
             ->where('type', 'sell')
             ->sum('discount_value');
 
-        # total Discounts in Purchases
+        // total Discounts in Purchases
         $total_discount_in_purchases_query = Transaction::query();
         if (isset($request->branch_id) && $request->branch_id) {
             $total_discount_in_purchases_query->where('branch_id', $request->branch_id);
         }
-        if ($date_from && $date_to) {
-            $total_discount_in_purchases_query->whereBetween('transaction_date', [$date_from, $date_to]);
-        }
+        // if ($date_from && $date_to) {
+        //     $total_discount_in_purchases_query->whereBetween('transaction_date', [$date_from, $date_to]);
+        // }
         $total_discount_in_purchases = $total_discount_in_purchases_query
             ->where('type', 'purchase')
             ->sum('discount_value');
@@ -184,20 +173,20 @@ class HomeController extends Controller
         }
 
         // Filter by date range if provided
-        if ($date_from && $date_to) {
-            $total_spoiled_stock_query->whereBetween('created_at', [$date_from, $date_to]);
-        }
+        // if ($date_from && $date_to) {
+        //     $total_spoiled_stock_query->whereBetween('created_at', [$date_from, $date_to]);
+        // }
 
-        # Total Spoiled Stock (with date filtering)
+        // Total Spoiled Stock (with date filtering)
         $total_spoiled_stock_query = SpoiledLine::query();
         if (isset($request->branch_id) && $request->branch_id) {
             $total_spoiled_stock_query->whereHas('transaction', function ($query) use ($request) {
                 $query->where('branch_id', $request->branch_id);
             });
         }
-        if ($date_from && $date_to) {
-            $total_spoiled_stock_query->whereBetween('created_at', [$date_from, $date_to]);
-        }
+        // if ($date_from && $date_to) {
+        //     $total_spoiled_stock_query->whereBetween('created_at', [$date_from, $date_to]);
+        // }
 
         $total_price_of_spoiled_stock = 0;
         $total_spoiled_stock_query->each(function ($spoiledLine) use (&$total_price_of_spoiled_stock) {
@@ -205,20 +194,19 @@ class HomeController extends Controller
                 $total_price_of_spoiled_stock += $spoiledLine->product->getSalePriceByUnit($spoiledLine->product->unit_id) * $spoiledLine->quantity;
             }
         });
-        # Total Taxes in Sales
-        # Total Taxes in Sales (with date filtering)
+        // Total Taxes in Sales
+        // Total Taxes in Sales (with date filtering)
         $total_taxes_in_sales_query = Transaction::query();
         if (isset($request->branch_id) && $request->branch_id) {
             $total_taxes_in_sales_query->where('branch_id', $request->branch_id);
         }
-        if ($date_from && $date_to) {
-            $total_taxes_in_sales_query->whereBetween('transaction_date', [$date_from, $date_to]);
-        }
+        // if ($date_from && $date_to) {
+        //     $total_taxes_in_sales_query->whereBetween('transaction_date', [$date_from, $date_to]);
+        // }
         $total_taxes_in_sales = $total_taxes_in_sales_query
             ->where('type', 'sell')
             ->sum('tax_amount');
         $total_profit = $total_sales - $totla_purchase;
-
 
         $net_profit_query = Transaction::query()
             ->where('type', 'sell');
@@ -237,7 +225,9 @@ class HomeController extends Controller
             ->get()
             ->sum(function ($transaction) {
                 return $transaction->TransactionSellLines->sum(function ($sellLine) {
-                    $productUnitDetail = $sellLine->Product->ProductUnitDetails
+                    $productUnitDetail = $sellLine
+                        ->Product
+                        ->ProductUnitDetails
                         ->where('unit_id', $sellLine->unit_id)
                         ->first();
 
@@ -255,14 +245,12 @@ class HomeController extends Controller
 
         $net_profit = ($net_profit_from_sales_and_purchases + $total_discount_in_purchases) - ($total_expenses + $total_discount_in_sales + $total_price_of_spoiled_stock + $total_taxes_in_sales);
 
-
         $userAuth = \Auth::user();
 
         $uesrAuthBranchesIds = $userAuth->Branches->pluck('id');
 
         $products = ProductBranchDetails::query();
         if (!$userAuth->super) {
-
             $products->whereIn('branch_id', $uesrAuthBranchesIds);
         }
 
@@ -286,9 +274,8 @@ class HomeController extends Controller
             ->where('created_at', '>=', Carbon::now()->subDays(30))
             ->get()
             ->groupBy(function ($date) {
-                return Carbon::parse($date->created_at)->format('Y-m-d'); // Group by date
+                return Carbon::parse($date->created_at)->format('Y-m-d');  // Group by date
             });
-
 
         // Loop through the last 30 days and assign total or 0
         foreach ($last30Days as $day) {
@@ -301,7 +288,8 @@ class HomeController extends Controller
             }
         }
         // Generate the chart
-        $chart = (new LarapexChart)->lineChart()
+        $chart = (new LarapexChart)
+            ->lineChart()
             ->setTitle('Sales for the Last 30 Days')
             ->setXAxis($dates)
             ->setDataset([
@@ -310,8 +298,6 @@ class HomeController extends Controller
                     'data' => $totals
                 ]
             ]);
-
-
 
         return view('Dashboard.home', compact(
             'total_sales',
@@ -334,6 +320,7 @@ class HomeController extends Controller
             'total_partial_sell'
         ));
     }
+
     public function markAsRead(Request $request)
     {
         $notification = auth()->user()->notifications()->find($request->notification_id);

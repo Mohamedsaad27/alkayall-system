@@ -403,35 +403,6 @@
               </ul>
             </li>
           @endif
-          @if (auth('user')->user()->has_permission('read-fixed-assets') || auth('user')->user()->has_permission('read-asset-categories'))
-            <li class="nav-item has-treeview {{ request()->routeIs('dashboard.fixed-assets.*') || request()->routeIs('dashboard.asset-categories.*') ? 'menu-open' : '' }}">
-                <a href="#" class="nav-link {{ request()->routeIs('dashboard.fixed-assets.*') || request()->routeIs('dashboard.asset-categories.*') ? 'active' : '' }}">
-                    <i class="nav-icon fas fa-box"></i>
-                    <p>
-                        {{ trans('admin.Fixed Assets') }}
-                        <i class="right fas fa-angle-left"></i>
-                    </p>
-                </a>
-                <ul class="nav nav-treeview">
-                    @if (auth('user')->user()->has_permission('read-fixed-assets'))
-                        <li class="nav-item">
-                            <a href="{{ route('dashboard.fixed-assets.index') }}" class="nav-link {{ request()->routeIs('dashboard.fixed-assets.index') ? 'active' : '' }}">
-                                <i class="far fa-circle nav-icon"></i>
-                                <p>{{ trans('admin.fixed_assets_list') }}</p>
-                            </a>
-                        </li>
-                    @endif
-                    @if (auth('user')->user()->has_permission('create-fixed-assets'))
-                        <li class="nav-item">
-                            <a href="{{ route('dashboard.fixed-assets.create') }}" class="nav-link {{ request()->routeIs('dashboard.fixed-assets.create') ? 'active' : '' }}">
-                                <i class="far fa-circle nav-icon"></i>
-                                <p>{{ trans('admin.add_fixed_asset') }}</p>
-                            </a>
-                        </li>
-                    @endif
-                </ul>
-            </li>
-          @endif
           @if (auth('user')->user()->has_permission('read-stock-transfers') || auth('user')->user()->has_permission('create-stock-transfers'))
           <li class="nav-item has-treeview {{request()->routeIs('dashboard.stock-transfers.*') ? 'menu-open' : ''}}">
             <a href="#" class="nav-link {{request()->routeIs('dashboard.stock-transfers.*') ? 'active' : ''}}">

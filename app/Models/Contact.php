@@ -31,6 +31,7 @@ class Contact extends Authenticatable implements JWTSubject
         'governorate_id',
         'is_default',
         'credit_limit',
+        'village_id',
         'sales_segment_id',
         'code',
         'contact_code',
@@ -90,6 +91,11 @@ class Contact extends Authenticatable implements JWTSubject
         return $this->belongsTo(City::class, 'city_id');
     }
 
+    public function village()
+    {
+        return $this->belongsTo(Village::class, 'village_id');
+    }
+
     public function getBranch()
     {
         $branch = DB::table('branchs')->where('governorate_id', $this->governorate_id)->first();
@@ -127,7 +133,6 @@ class Contact extends Authenticatable implements JWTSubject
     {
         return $this->belongsToMany(User::class, 'contact_user', 'contact_id', 'user_id');
     }
-    
 
     /**
      * Return a key value array, containing any custom claims to be added to the JWT.
@@ -182,17 +187,16 @@ class Contact extends Authenticatable implements JWTSubject
 
     public function generateNewCode($sku)
     {
-        
         if ($sku && !$this->where('sku', $sku)->exists()) {
             return $sku;
         }
-    
+
         $maxSku = $this->selectRaw('MAX(CAST(code AS UNSIGNED)) as max_sku')->value('max_sku');
-     
+
         if (is_null($maxSku)) {
             return 1;
         }
-    
+
         return intval($maxSku) + 1;
     }
 

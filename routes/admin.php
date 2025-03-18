@@ -39,6 +39,7 @@ use App\Http\Controllers\Dashboard\UnitController;
 use App\Http\Controllers\Dashboard\UserAttendanceController;
 use App\Http\Controllers\Dashboard\UserController;
 use App\Http\Controllers\Dashboard\VaultController;
+use App\Http\Controllers\Dashboard\VillageController;
 use App\Http\Controllers\Dashboard\WarehouseController;
 use App\Http\Controllers\Controller;
 use App\Http\Controllers\PaymentTransactionController;
@@ -175,6 +176,15 @@ Route::group(
                     Route::get('{id}/edit', [CityController::class, 'edit'])->name('edit');
                     Route::post('{id}/edit', [CityController::class, 'update'])->name('update');
                     Route::get('{id}/destroy', [CityController::class, 'destroy'])->name('destroy');
+                });
+                Route::group(['prefix' => 'villages', 'as' => 'villages.'], function () {
+                    Route::get('/', [VillageController::class, 'index'])->name('index');
+                    Route::get('/create', [VillageController::class, 'create'])->name('create');
+                    Route::post('/create', [VillageController::class, 'store'])->name('store');
+                    Route::get('{id}/edit', [VillageController::class, 'edit'])->name('edit');
+                    Route::post('{id}/edit', [VillageController::class, 'update'])->name('update');
+                    Route::get('{id}/destroy', [VillageController::class, 'destroy'])->name('destroy');
+                    Route::get('/get-villages', [VillageController::class, 'getVillagesBasedOnCity'])->name('getVillagesBasedOnCity');
                 });
                 Route::group(['prefix' => 'governorates', 'as' => 'governorates.'], function () {
                     Route::get('/', [GovernorateController::class, 'index'])->name('index');
