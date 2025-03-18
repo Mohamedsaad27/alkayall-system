@@ -28,7 +28,11 @@ Route::group(
         Livewire::setUpdateRoute(function ($handle) {
             return Route::post('/custom/livewire/update', $handle);
         });
-        Route::get('/', [HomeController::class, 'index'])->name('index');
+        // Route::get('/', [HomeController::class, 'index'])->name('index');
+        Route::get('/', function(){
+            return Redirect::route('dashboard.adminlogin');
+        });
+
         Route::get('/login', [AuthenticationController::class, 'loginView'])->name('login');
         Route::post('/login', [AuthenticationController::class, 'login'])->name('login');
         Route::get('/register', [AuthenticationController::class, 'showRegistrationForm'])->name('register');
