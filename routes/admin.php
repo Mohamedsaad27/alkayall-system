@@ -12,6 +12,7 @@ use App\Http\Controllers\Dashboard\ContactController;
 use App\Http\Controllers\Dashboard\DiscountController;
 use App\Http\Controllers\Dashboard\ExpenseCategoryController;
 use App\Http\Controllers\Dashboard\ExpenseController;
+use App\Http\Controllers\Dashboard\FixedAssetController;
 use App\Http\Controllers\Dashboard\GovernorateController;
 use App\Http\Controllers\Dashboard\HomeController;
 use App\Http\Controllers\Dashboard\HumanResourceController;
@@ -333,6 +334,15 @@ Route::group(
                     Route::post('{id}/edit', [ExpenseController::class, 'update'])->name('update');
                     Route::get('{id}/destroy', [ExpenseController::class, 'destroy'])->name('destroy');
                     Route::get('{id}/show', [ExpenseController::class, 'show'])->name('show');
+                });
+                Route::group(['prefix' => 'fixed-assets', 'as' => 'fixed-assets.'], function () {
+                    Route::get('/', [FixedAssetController::class, 'index'])->name('index');
+                    Route::get('/create', [FixedAssetController::class, 'create'])->name('create');
+                    Route::post('/create', [FixedAssetController::class, 'store'])->name('store');
+                    Route::get('{id}/edit', [FixedAssetController::class, 'edit'])->name('edit');
+                    Route::put('{fixedAsset}/edit', [FixedAssetController::class, 'update'])->name('update');
+                    Route::get('{fixedAsset}/destroy', [FixedAssetController::class, 'destroy'])->name('destroy');
+                    Route::get('{fixedAsset}/show', [FixedAssetController::class, 'show'])->name('show');
                 });
                 Route::group(['prefix' => 'stock-transfers', 'as' => 'stock-transfers.'], function () {
                     Route::get('/', [StockTransferController::class, 'index'])->name('index');

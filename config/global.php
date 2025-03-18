@@ -82,7 +82,8 @@ return [
         'manufacturing-reports' => ['read', 'create', 'update', 'delete', 'show'],
         'activityTypes' => ['read', 'create', 'update', 'delete', 'show'],
         'settings' => ['read', 'create', 'update', 'delete', 'show'],
-        'site-settings' => ['read']
+        'site-settings' => ['read'],
+        'fixed-assets' => ['read', 'create', 'update', 'delete']
     ],
 ];
 ?>

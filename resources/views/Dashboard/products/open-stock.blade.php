@@ -51,9 +51,9 @@
                                                 <input name="open_stock[{{$branch->id}}][{{$key}}][branch_id]" value="{{$branch->id}}"  type="hidden" class="form-control">
                                             </td>
                                             <td>
-                                                <input name="open_stock[{{$branch->id}}][{{$key}}][quantity]" type="number" class="form-control" required>
+                                                <input name="open_stock[{{$branch->id}}][{{$key}}][quantity]" type="text" class="form-control" required>
                                             </td>
-                                            <input hidden name="open_stock[{{$branch->id}}][{{$key}}][unit_price]" value="{{ $product->getPurchasePrice() }}" step=".01"  type="number" class="form-control" required>
+                                            <input hidden name="open_stock[{{$branch->id}}][{{$key}}][unit_price]" value="{{ $product->getPurchasePrice() }}" step=".01"  type="text" class="form-control" required>
                                         </tr>
                                     </table>
                                 @endforeach

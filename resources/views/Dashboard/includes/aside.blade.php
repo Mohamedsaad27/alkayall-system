@@ -139,7 +139,7 @@
                     </a>
                   </li>
                 @endif
-               
+
 
               </ul>
             </li>
@@ -238,7 +238,7 @@
           </li>
         @endif
 
-          @if (auth('user')->user()->has_permission('read-products') || 
+          @if (auth('user')->user()->has_permission('read-products') ||
               auth('user')->user()->has_permission('read-categories')||
               auth('user')->user()->has_permission('read-units')||
               auth('user')->user()->has_permission('read-brands')||
@@ -263,7 +263,7 @@
                 </p>
               </a>
               <ul class="nav nav-treeview">
-                
+
                 @if (auth('user')->user()->has_permission('read-products') || auth('user')->user()->has_permission('import-products') || auth('user')->user()->has_permission('import-open-stock'))
                   <li class="nav-item {{(request()->routeIs('dashboard.products.*') || request()->routeIs('dashboard.import-products') || request()->routeIs('dashboard.import-open-stock'))? 'menu-open':''}}">
                     <a href="#" class="nav-link">
@@ -327,7 +327,7 @@
                     </a>
                   </li>
                 @endif
-                
+
                 <!-- @if (auth('user')->user()->has_permission('read-brands'))
                   <li class="nav-item">
                     <a href="{{route('dashboard.brands.index')}}" class="nav-link {{(request()->routeIs('dashboard.brands.*'))? 'active':''}}">
@@ -401,6 +401,35 @@
                   </li>
                 @endif
               </ul>
+            </li>
+          @endif
+          @if (auth('user')->user()->has_permission('read-fixed-assets') || auth('user')->user()->has_permission('read-asset-categories'))
+            <li class="nav-item has-treeview {{ request()->routeIs('dashboard.fixed-assets.*') || request()->routeIs('dashboard.asset-categories.*') ? 'menu-open' : '' }}">
+                <a href="#" class="nav-link {{ request()->routeIs('dashboard.fixed-assets.*') || request()->routeIs('dashboard.asset-categories.*') ? 'active' : '' }}">
+                    <i class="nav-icon fas fa-box"></i>
+                    <p>
+                        {{ trans('admin.Fixed Assets') }}
+                        <i class="right fas fa-angle-left"></i>
+                    </p>
+                </a>
+                <ul class="nav nav-treeview">
+                    @if (auth('user')->user()->has_permission('read-fixed-assets'))
+                        <li class="nav-item">
+                            <a href="{{ route('dashboard.fixed-assets.index') }}" class="nav-link {{ request()->routeIs('dashboard.fixed-assets.index') ? 'active' : '' }}">
+                                <i class="far fa-circle nav-icon"></i>
+                                <p>{{ trans('admin.fixed_assets_list') }}</p>
+                            </a>
+                        </li>
+                    @endif
+                    @if (auth('user')->user()->has_permission('create-fixed-assets'))
+                        <li class="nav-item">
+                            <a href="{{ route('dashboard.fixed-assets.create') }}" class="nav-link {{ request()->routeIs('dashboard.fixed-assets.create') ? 'active' : '' }}">
+                                <i class="far fa-circle nav-icon"></i>
+                                <p>{{ trans('admin.add_fixed_asset') }}</p>
+                            </a>
+                        </li>
+                    @endif
+                </ul>
             </li>
           @endif
           @if (auth('user')->user()->has_permission('read-stock-transfers') || auth('user')->user()->has_permission('create-stock-transfers'))
@@ -567,9 +596,9 @@
             </a>
           </li>
           @endif
- 
+
         @endif
-        
+
           @if (auth('user')->user()->has_permission('read-hr') && $settings->hr_module)
           <li class="nav-item has-treeview">
             <a href="#" class="nav-link">
@@ -652,7 +681,7 @@
                     <i class="far fa-circle nav-icon"></i>
                     <p>{{ trans('admin.Invoice Settings') }}</p>
                   </a>
-                </li> 
+                </li>
                 <li class="nav-item">
                   <a href="{{route('dashboard.settings.tax-rates.index')}}" class="nav-link {{request()->routeIs('dashboard.settings.tax-rates.*')? 'active':''}}">
                     <i class="far fa-circle nav-icon"></i>
@@ -690,12 +719,12 @@
                   <p>{{ trans('admin.site-slider') }}</p>
                 </a>
               </li>
-              
-             
+
+
             </ul>
           </li>
         @endif
-        
+
 
         </ul>
       </nav>

@@ -2,13 +2,12 @@
 
 @include('Dashboard.includes.header')
 
-
 @include('Dashboard.includes.navbar')
 
 @include('Dashboard.includes.aside')
 
 <div class="content-wrapper">
-   
+
     @yield('content')
 </div>
 
