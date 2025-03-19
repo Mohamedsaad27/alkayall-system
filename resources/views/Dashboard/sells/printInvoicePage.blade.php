@@ -213,8 +213,8 @@
     </table> 
     <div class="alert-section" style="margin-top: 20px; padding: 10px; border: 1px solid #ff0000; background-color: #fff8f8; text-align: center;"> 
         <p style="font-weight: bold; color: #ff0000; margin: 0;"> 
-            تنويه هام : التشييك علي الاصناف ومعاينة المنتجات مسؤلية العميل فيرجي مراجعة الفاتورة قبل مغادرتنا المرتجع او الاستبدال خلال 10 ايام من تاريخ استلام الفاتورة 
-        </p> 
+            ممنوع رجوع البضاعة بعد 3 ايام من تاريخ اصدار الفاتورة ونحن غير مسؤولين عن سوء التخزين 
+    </p> 
     </div> 
 </div>
     </div>
