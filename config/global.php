@@ -65,6 +65,7 @@ return [
             'read-chart',
             'read-total_partial_purchase',
             'read-total_partial_sell',
+            'read-total_product_price_per_branch'
         ],
         'reports' => [
             'read-change-in-price-report',

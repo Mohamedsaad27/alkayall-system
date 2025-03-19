@@ -40,7 +40,7 @@
                     </div>
                 </div>
                 @endif
-           
+
                 @if(auth('user')->user()->has_permission('read-total_paid_sales-statistics'))
                 <div class="col-lg-3 col-6">
                     <!-- small box -->
@@ -81,10 +81,10 @@
                 </div>
                 @endif
                 <!-- ./col -->
-               
+
                 <!-- ./col -->
-              
-                
+
+
                 <!-- ./col -->
             </div>
             <!-- /.row -->
@@ -177,7 +177,7 @@
                 </div>
                 @endif
                 <!-- ./col -->
-                
+
                 @if(auth('user')->user()->has_permission('read-total_expenses-statistics'))
                 <div class="col-lg-3 col-6">
                     <!-- small box -->
@@ -193,7 +193,7 @@
                 </div>
                 @endif
                 <!-- ./col -->
-          
+
                 @if(auth('user')->user()->has_permission('read-net_profit-statistics'))
                 <div class="col-lg-3 col-6">
                     <!-- small box -->
@@ -209,9 +209,24 @@
                 </div>
                 @endif
                 <!-- ./col -->
+
+                @if(auth('user')->user()->has_permission('read-total_product_price_per_branch-statistics'))
+                <div class="col-lg-3 col-6">
+                    <!-- small box -->
+                    <div class="small-box bg-secondary">
+                        <div class="inner">
+                            <h3>{{ $total_product_price_per_branch }}</h3>
+                            <p>{{ trans('admin.total_product_price_per_branch') }}</p>
+                        </div>
+                        <div class="icon">
+                            <i class="ion ion-cash"></i>
+                        </div>
+                    </div>
+                </div>
+                @endif
             </div>
             <!-- /.row -->
-         
+
             <!-- /.row -->
 
                 <!-- ./col -->
@@ -254,7 +269,7 @@
                         <div class="card-header">
                             <h3 class="card-title">{{ trans('admin.net_profit') }} : {{ $net_profit }}</h3>
                         </div>
-                        
+
                     </div>
                     <!-- /.card -->
                     </div>

@@ -13,6 +13,7 @@ use App\Models\Transaction;
 use ArielMejiaDev\LarapexCharts\LarapexChart;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
 
 class HomeController extends Controller
@@ -257,6 +258,34 @@ class HomeController extends Controller
         $products = $products->whereHas('Product', function ($query) {
             $query->whereColumn('product_branch_details.qty_available', '<=', 'products.quantity_alert');
         })->with('Product')->get();
+
+        // Total Price Products in stoke par branche
+        $query = Product::where('enable_stock', true)
+            ->where('is_published', true)
+            ->join('product_branch_details', 'products.id', '=', 'product_branch_details.product_id')
+            ->join('product_unit_details', function ($join) {
+                $join->on('products.id', '=', 'product_unit_details.product_id')
+                    ->whereColumn('product_unit_details.unit_id', '=', 'products.unit_id'); // Select only the base unit
+            })
+            ->select(
+                'product_branch_details.branch_id',
+                DB::raw('SUM(product_unit_details.sale_price * product_branch_details.qty_available) as total_price')
+            )
+            ->groupBy('product_branch_details.branch_id');
+
+        // If found filter based on branch
+        if (isset($request->branch_id) && $request->branch_id) {
+            $query->where('product_branch_details.branch_id', $request->branch_id);
+        }
+
+        if (!empty($request->date_from) && !empty($request->date_to)) {
+            $query->whereBetween('product_branch_details.transaction_date', [$request->date_from, $request->date_to]);
+        }
+
+        $result = $query->get();
+        $total_product_price_per_branch = $result->sum('total_price');
+
+        // dd($sum_prices_per_branch);
         // start transactions'chart
 
         $dates = [];
@@ -308,6 +337,7 @@ class HomeController extends Controller
             'total_paid_purchase',
             'totla_purchase_returns',
             'products',
+            'total_product_price_per_branch',
             'totla_unpaid_purchase',
             'total_expenses',
             'total_profit',
