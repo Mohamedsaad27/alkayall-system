@@ -27,7 +27,7 @@
                         <span class="text-primary mark-all-as-read" style="cursor: pointer;">{{ trans('admin.Mark all as read') }}</span>
                     </div>
                 </div>
-            
+
                 <div class="notification-body">
                     @foreach (auth()->user()->unreadNotifications()->orderBy('created_at', 'desc')->get() as $notification)
                         <div class="notification-item unread" data-notification-id="{{ $notification->id }}">
@@ -50,7 +50,7 @@
         </li>
 
         <!-- Action Buttons -->
-        <li class="nav-item">
+        <li class="nav-item d-none d-md-block">
             @if (auth('user')->user()->has_permission('create-products'))
                 <a href="{{ route('dashboard.sells.create') }}"
                     class="btn btn-info mr-2">{{ trans('admin.Add_sale') }}</a>
@@ -58,7 +58,7 @@
                 <a href="#" class="btn btn-info disabled">{{ trans('admin.Add') }}</a>
             @endif
         </li>
-        <li class="nav-item">
+        <li class="nav-item d-none d-md-block">
             @if (auth('user')->user()->has_permission('view-payment-history-customers'))
                 <a href="{{ route('dashboard.contacts.payment-history', ['id' => \App\Models\Contact::where('type', 'customer')->first()->id ?? 0, 'type' => 'customer']) }}"
                     class="btn btn-info mr-2">{{ trans('admin.Customer_collection') }}</a>
@@ -66,7 +66,7 @@
                 <a href="#" class="btn btn-info disabled">{{ trans('admin.Customer_collection') }}</a>
             @endif
         </li>
-        <li class="nav-item">
+        <li class="nav-item d-none d-md-block   ">
             @if (auth('user')->user()->has_permission('view-payment-history-suppliers'))
                 <a href="{{ route('dashboard.contacts.payment-history', ['id' => \App\Models\Contact::where('type', 'supplier')->first()->id ?? 0, 'type' => 'supplier']) }}"
                     class="btn btn-info mr-2">{{ trans('admin.Supplier_collection') }}</a>
@@ -121,13 +121,13 @@
                 }
             });
         }
-    
+
         // Mark single notification as read
         $(document).on('click', '.notification-item.unread', function(e) {
             e.preventDefault();
             const notificationId = $(this).data('notification-id');
             const $notificationItem = $(this);
-    
+
             $.ajax({
                 url: "{{ route('markAsRead') }}",
                 method: 'POST',
@@ -147,12 +147,12 @@
                 }
             });
         });
-    
+
         // Mark all notifications as read
         $('.mark-all-as-read').click(function(e) {
             e.preventDefault();
             e.stopPropagation(); // Prevent dropdown from closing
-    
+
             $.ajax({
                 url: "{{ route('markAllAsRead') }}",
                 method: 'GET',
@@ -171,7 +171,7 @@
                 }
             });
         });
-    
+
         // Optional: Close dropdown when clicking outside
         $(document).on('click', function(e) {
             if (!$(e.target).closest('.notification-dropdown, .nav-link').length) {

@@ -145,6 +145,8 @@ return [
     'read-activity-logs' => 'قراءة سجل النشاط',
     'statistics' => 'الإحصائيات',
     'total_product_price_per_branch' => 'إجمالي قيمة المنتجات في المخزون',
+    'total_debt' => 'إجمالي الدين',
+    'total_liability' => 'إجمالي المديونية',
     'read-total_sales' => 'قراءة إجمالي المبيعات',
     'read-total_sales_returns' => 'قراءة إجمالي إرجاع المبيعات',
     'read-total_unpaid_sales' => 'قراءة إجمالي المبيعات غير المدفوعة',

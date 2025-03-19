@@ -224,6 +224,36 @@
                     </div>
                 </div>
                 @endif
+
+                @if(auth('user')->user()->has_permission('read-total_debt-statistics'))
+                <div class="col-lg-3 col-6">
+                    <!-- small box -->
+                    <div class="small-box bg-info">
+                        <div class="inner">
+                            <h3>{{ $total_debt }}</h3>
+                            <p>{{ trans('admin.total_debt') }}</p>
+                        </div>
+                        <div class="icon">
+                            <i class="ion ion-cash"></i>
+                        </div>
+                    </div>
+                </div>
+                @endif
+
+                @if(auth('user')->user()->has_permission('read-total_liability-statistics'))
+                <div class="col-lg-3 col-6">
+                    <!-- small box -->
+                    <div class="small-box bg-info">
+                        <div class="inner">
+                            <h3>{{ $total_liability }}</h3>
+                            <p>{{ trans('admin.total_liability') }}</p>
+                        </div>
+                        <div class="icon">
+                            <i class="ion ion-cash"></i>
+                        </div>
+                    </div>
+                </div>
+                @endif
             </div>
             <!-- /.row -->
 

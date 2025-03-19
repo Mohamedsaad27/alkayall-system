@@ -279,13 +279,22 @@ class HomeController extends Controller
         }
 
         if (!empty($request->date_from) && !empty($request->date_to)) {
-            $query->whereBetween('product_branch_details.transaction_date', [$request->date_from, $request->date_to]);
+            $query->whereBetween('product_branch_details.created_at', [$request->date_from, $request->date_to]);
         }
 
         $result = $query->get();
         $total_product_price_per_branch = $result->sum('total_price');
 
-        // dd($sum_prices_per_branch);
+        // Calculate the total debt: The total outstanding balance of active customers
+        $total_debt = Contact::where('is_active', true)
+            ->where('type', 'customer')
+            ->sum('balance');
+
+        // Calculate the total liability: The total outstanding balance owed to active suppliers
+        $total_liability = Contact::where('is_active', true)
+            ->where('type', 'supplier')
+            ->sum('balance');
+
         // start transactions'chart
 
         $dates = [];
@@ -338,6 +347,8 @@ class HomeController extends Controller
             'totla_purchase_returns',
             'products',
             'total_product_price_per_branch',
+            'total_debt',
+            'total_liability',
             'totla_unpaid_purchase',
             'total_expenses',
             'total_profit',
