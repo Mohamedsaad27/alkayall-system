@@ -215,9 +215,9 @@ class HomeController extends Controller
         if (isset($request->branch_id) && $request->branch_id) {
             $net_profit_query->where('branch_id', $request->branch_id);
         }
-        if ($date_from && $date_to) {
-            $net_profit_query->whereBetween('transaction_date', [$date_from, $date_to]);
-        }
+        //if ($date_from && $date_to) {
+        //}
+        $net_profit_query->whereBetween('transaction_date', [$date_from, $date_to]);
 
         $net_profit_from_sales_and_purchases = $net_profit_query
             ->with([
