@@ -238,7 +238,7 @@ class HomeController extends Controller
                         $purchasePrice = $productUnitDetail->purchase_price;
                         $quantity = $sellLine->quantity;
                         
-                        if($sellPrice < $purchasePrice ){
+                        if($salePrice < $purchasePrice ){
                             dd($salePrice , "    " , $purchasePrice , $productUnitDetail );
                         }
 
