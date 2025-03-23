@@ -236,7 +236,7 @@ class HomeController extends Controller
                         
                         $profitPerItem = ($salePrice - $purchasePrice) * $quantity;
 
-                        return $salePrice;
+                        return $purchasePrice;
                     }
 
                     return 0;
