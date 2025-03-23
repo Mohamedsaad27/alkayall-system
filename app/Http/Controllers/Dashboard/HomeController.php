@@ -236,11 +236,14 @@ class HomeController extends Controller
                         
                         $profitPerItem = ($salePrice - $purchasePrice) * $quantity;
 
-                        return $profitPerItem;
-                    }
+                        dump([
+                            'salePrice' => $salePrice,
+                            'purchasePrice' => $purchasePrice,
+                            'quantity' => $quantity,
+                            'profitPerItem' => $profitPerItem
+                        ]);
 
-                    if (!$productUnitDetail) {
-                        dd("Missing ProductUnitDetails for product ID: {$sellLine->product_id}, unit ID: {$sellLine->unit_id}");
+                        return $profitPerItem;
                     }
 
                     return 0;
