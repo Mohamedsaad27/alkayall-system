@@ -227,24 +227,16 @@ class HomeController extends Controller
             ->get()
             ->sum(function ($transaction) {
                 return $transaction->TransactionSellLines->sum(function ($sellLine) {
-                    $productUnitDetail = $sellLine
-                        ->Product
-                        ->ProductUnitDetails
-                        ->where('unit_id', $sellLine->unit_id)
-                        ->first();
-
+                    $productUnitDetail = $sellLine->Product->ProductUnitDetails->where('unit_id', $sellLine->unit_id)->first();
+                    
                     if ($productUnitDetail) {
                         $salePrice = $sellLine->unit_price;
                         $purchasePrice = $productUnitDetail->purchase_price;
                         $quantity = $sellLine->quantity;
                         
-                        if($salePrice < $purchasePrice ){
-                            dd($salePrice , "    " , $purchasePrice , $productUnitDetail );
-                        }
+                        $profitPerItem = ($salePrice - $purchasePrice) * $quantity;
 
-                        return ($salePrice - $purchasePrice) * $quantity;
-                    } else{
-                        dd('mohamed');
+                        return $salePrice;
                     }
 
                     return 0;
