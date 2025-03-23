@@ -248,15 +248,15 @@ class HomeController extends Controller
 
         $net_profit = ($net_profit_from_sales_and_purchases + $total_discount_in_purchases) - ($total_expenses + $total_discount_in_sales + $total_price_of_spoiled_stock + $total_taxes_in_sales);
 
-        // dd([
-        //     'net_profit' => $net_profit,
-        //     'net_profit_from_sales_and_purchases' => $net_profit_from_sales_and_purchases,
-        //     'total_discount_in_purchases' => $total_discount_in_purchases,
-        //     'total_expenses' => $total_expenses,
-        //     'total_discount_in_sales' => $total_discount_in_sales,
-        //     'total_price_of_spoiled_stock' => $total_price_of_spoiled_stock,
-        //     'total_taxes_in_sales' => $total_taxes_in_sales,
-        // ]);
+        dd([
+            'net_profit' => $net_profit,
+            'net_profit_from_sales_and_purchases' => $net_profit_from_sales_and_purchases,
+            'total_discount_in_purchases' => $total_discount_in_purchases,
+            'total_expenses' => $total_expenses,
+            'total_discount_in_sales' => $total_discount_in_sales,
+            'total_price_of_spoiled_stock' => $total_price_of_spoiled_stock,
+            'total_taxes_in_sales' => $total_taxes_in_sales,
+        ]);
         
 
         $userAuth = \Auth::user();
