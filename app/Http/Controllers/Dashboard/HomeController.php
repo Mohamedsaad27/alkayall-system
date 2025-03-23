@@ -239,6 +239,10 @@ class HomeController extends Controller
                         return $profitPerItem;
                     }
 
+                    if (!$productUnitDetail) {
+                        Log::warning("Missing ProductUnitDetails for product ID: {$sellLine->product_id}, unit ID: {$sellLine->unit_id}");
+                    }
+
                     return 0;
                 });
             });
