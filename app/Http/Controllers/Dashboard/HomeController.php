@@ -234,12 +234,17 @@ class HomeController extends Controller
                         ->first();
 
                     if ($productUnitDetail) {
-                        // dd($productUnitDetail);
                         $salePrice = $sellLine->unit_price;
                         $purchasePrice = $productUnitDetail->purchase_price;
                         $quantity = $sellLine->quantity;
+                        
+                        if($sellPrice < $purchasePrice ){
+                            dd($salePrice , "    " , $purchasePrice , $productUnitDetail );
+                        }
 
                         return ($salePrice - $purchasePrice) * $quantity;
+                    } else{
+                        dd('mohamed');
                     }
 
                     return 0;
