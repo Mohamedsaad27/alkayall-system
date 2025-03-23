@@ -38,11 +38,11 @@ class HomeController extends Controller
         $total_sales = $total_sales_query->where('type', 'sell')->sum('final_price');
 
         // Total Sales Returns
-
         $total_sales_returns_query = Transaction::query();
         if (isset($request->branch_id) && $request->branch_id) {
             $total_sales_returns_query->where('branch_id', $request->branch_id);
         }
+        
         // if ($date_from && $date_to) {
         //     $total_sales_returns_query->whereBetween('transaction_date', [$date_from, $date_to]);
         // }
@@ -207,6 +207,7 @@ class HomeController extends Controller
         $total_taxes_in_sales = $total_taxes_in_sales_query
             ->where('type', 'sell')
             ->sum('tax_amount');
+
         $total_profit = $total_sales - $totla_purchase;
 
         $net_profit_query = Transaction::query()
@@ -245,6 +246,17 @@ class HomeController extends Controller
             });
 
         $net_profit = ($net_profit_from_sales_and_purchases + $total_discount_in_purchases) - ($total_expenses + $total_discount_in_sales + $total_price_of_spoiled_stock + $total_taxes_in_sales);
+
+        dd([
+            'net_profit' => $net_profit,
+            'net_profit_from_sales_and_purchases' => $net_profit_from_sales_and_purchases,
+            'total_discount_in_purchases' => $total_discount_in_purchases,
+            'total_expenses' => $total_expenses,
+            'total_discount_in_sales' => $total_discount_in_sales,
+            'total_price_of_spoiled_stock' => $total_price_of_spoiled_stock,
+            'total_taxes_in_sales' => $total_taxes_in_sales,
+        ]);
+        
 
         $userAuth = \Auth::user();
 
