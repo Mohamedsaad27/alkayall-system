@@ -234,7 +234,7 @@ class HomeController extends Controller
                         ->first();
 
                     if ($productUnitDetail) {
-                        dd($productUnitDetail);
+                        dd($sellLine);
                         $salePrice = $sellLine->unit_price;
                         $purchasePrice = $productUnitDetail->purchase_price;
                         $quantity = $sellLine->quantity;
