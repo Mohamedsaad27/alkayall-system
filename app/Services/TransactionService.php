@@ -102,6 +102,8 @@ class TransactionService
                 ->orderBy('updated_at', 'desc')
                 ->get();
 
+            $productPurchasePrice = $product->ProductUnitDetails->where('unit_id' , $purchase_line['unit_id'])->value('purchase_price');
+                
             if (!$ProductBranchDetails) {
                 throw new \Exception("المنتج {$product->name} غير متوفر في الفرع المحدد.");
             }
@@ -113,6 +115,7 @@ class TransactionService
                     'product_id' => $purchase_line['product_id'],
                     'quantity' => $purchase_line['quantity'],
                     'unit_price' => $purchase_line['unit_price'],
+                    'unit_purchase_price' => $productPurchasePrice,
                     'total' => $purchase_line['quantity'] * $purchase_line['unit_price'],
                     'unit_id' => $purchase_line['unit_id'],
                     'warehouse_id' => $purchase_line['warehouse_id'] ?? null,
@@ -125,6 +128,7 @@ class TransactionService
                 'product_id' => $purchase_line['product_id'],
                 'quantity' => $ProductBranchDetails->qty_available,
                 'unit_price' => $purchase_line['unit_price'],
+                'unit_purchase_price' => $productPurchasePrice,
                 'total' => $ProductBranchDetails->qty_available * $purchase_line['unit_price'],
                 'unit_id' => $purchase_line['unit_id'],
                 'warehouse_id' => $purchase_line['warehouse_id'] ?? null,
@@ -144,6 +148,7 @@ class TransactionService
                     'product_id' => $purchase_line['product_id'],
                     'quantity' => $quantityFromWarehouse,
                     'unit_price' => $purchase_line['unit_price'],
+                    'unit_purchase_price' => $productPurchasePrice,
                     'total' => $quantityFromWarehouse * $purchase_line['unit_price'],
                     'unit_id' => $purchase_line['unit_id'],
                     'warehouse_id' => $branch->warehouse_id ?? null,

@@ -8,6 +8,7 @@ use App\Models\Contact;
 use App\Models\Expense;
 use App\Models\Product;
 use App\Models\ProductBranchDetails;
+use App\Models\ProductProfits;
 use App\Models\SpoiledLine;
 use App\Models\Transaction;
 use ArielMejiaDev\LarapexCharts\LarapexChart;
@@ -231,24 +232,17 @@ class HomeController extends Controller
                     
                     if ($productUnitDetail) {
                         $salePrice = $sellLine->unit_price;
-                        $purchasePrice = $productUnitDetail->purchase_price;
+                        $purchasePrice = $sellLine->unit_purchase_price;
                         $quantity = $sellLine->quantity;
                         
                         $profitPerItem = ($salePrice - $purchasePrice) * $quantity;
-
-                        dump([
-                            'salePrice' => $salePrice,
-                            'purchasePrice' => $purchasePrice,
-                            'quantity' => $quantity,
-                            'profitPerItem' => $profitPerItem
-                        ]);
 
                         return $profitPerItem;
                     }
 
                     return 0;
                 });
-            });
+            }) + ProductProfits::sum('profit') ;
 
         $net_profit = ($net_profit_from_sales_and_purchases + $total_discount_in_purchases) - ($total_expenses + $total_discount_in_sales + $total_price_of_spoiled_stock + $total_taxes_in_sales);
 
@@ -261,7 +255,6 @@ class HomeController extends Controller
         //     'total_price_of_spoiled_stock' => $total_price_of_spoiled_stock,
         //     'total_taxes_in_sales' => $total_taxes_in_sales,
         // ]);
-        
 
         $userAuth = \Auth::user();
 
@@ -321,6 +314,7 @@ class HomeController extends Controller
         for ($i = 0; $i < 30; $i++) {
             $last30Days->push(Carbon::now()->subDays($i)->format('Y-m-d'));
         }
+
         // Reverse the collection so it starts from the oldest day
         $last30Days = $last30Days->reverse();
 

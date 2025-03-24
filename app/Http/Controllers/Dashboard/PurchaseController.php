@@ -8,6 +8,7 @@ use App\Models\Brand;
 use App\Models\Branch;
 use App\Models\Contact;
 use App\Models\Product;
+use App\Models\ProductProfits;
 use App\Models\Setting;
 use App\Models\Transaction;
 use Illuminate\Http\Request;
@@ -270,6 +271,28 @@ class PurchaseController extends Controller
             $purchase_lines_array = [];
         
             foreach ($request->products as $productData) {
+
+                // Retrieve the product before editing to compare old and new purchase prices
+                $productBeforeEdit = Product::findOrFail($productData['id']);
+
+                $profitAfterEdit = null ;
+
+                $productUnitDetail = $productBeforeEdit->productUnitDetails
+                    ->where('unit_id', $productData['unit_id'])
+                    ->first();
+
+                $purchasePrice = $productData['unit_price'];
+            
+                // Calculate the profit adjustment based on the stock and price difference
+                $profitAfterEdit = ($purchasePrice - $productUnitDetail->purchase_price ) * $productBeforeEdit->getStock();
+
+                if($profitAfterEdit){
+                    ProductProfits::create([
+                        'product_id' => $productData['product_id'],
+                        'profit' => $profitAfterEdit,
+                    ]);
+                }
+
                 $purchase_lines_array[] = [
                     'product_id' => $productData['id'],
                     'quantity'   => $productData['quantity'],

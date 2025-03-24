@@ -12,6 +12,7 @@ use App\Models\ProductBranch;
 use App\Models\ProductBranchDetails;
 use App\Models\ProductPriceHistory;
 use App\Models\ProductUnitDetails;
+use App\Models\ProductProfits;
 use App\Models\SalesSegment;
 use App\Models\Setting;
 use App\Models\Unit;
@@ -368,9 +369,32 @@ class ProductController extends Controller
         $product = null;
 
         try {
+
+            // Retrieve the product before editing to compare old and new purchase prices
+            $productBeforeEdit = Product::findOrFail($validatedData['product_id']);
+
+            $profitAfterEdit = null ;
+
+            $productUnitDetail = $productBeforeEdit->productUnitDetails
+            ->where('unit_id', $validatedData['unit_id'])
+            ->first();
+
+            $purchasePrice = collect($validatedData['units'])->pluck('purchase_price')->first();
+        
+            // Calculate the profit adjustment based on the stock and price difference
+            $profitAfterEdit = ($purchasePrice - $productUnitDetail->purchase_price ) * $productBeforeEdit->getStock();
+
+            if($profitAfterEdit){
+                ProductProfits::create([
+                    'product_id' => $validatedData['product_id'],
+                    'profit' => $profitAfterEdit,
+                ]);
+            }
+
             DB::transaction(function () use ($validatedData, &$product) {
                 $product = $this->ProductService->edit($validatedData);
             });
+
             Notification::send(auth()->user(), new ProductNotification($product, 'update', 'تم تعديل المنتج ' . $product->name . ' بواسطة ' . auth()->user()->name));
 
             return redirect()
