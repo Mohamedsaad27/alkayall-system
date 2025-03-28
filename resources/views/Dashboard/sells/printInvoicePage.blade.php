@@ -141,7 +141,7 @@
                 <th>#</th>
                 <th>المنتج</th>
                 @if ($settings->display_warehouse)
-                <th>المخزن</th>
+                    <th>المخزن</th>
                 @endif
                 <th>العدد</th>
                 <th>الوحده</th>
@@ -155,7 +155,7 @@
                     <td>{{ $sell->product->name }}</td>
                     <td>{{ $sell->quantity }}</td>
                     @if ($settings->display_warehouse)
-                    <td>{{ $sell->warehouse->name ?? 'الفرع' }}</td>
+                        <td>{{ $sell->warehouse->name ?? 'الفرع' }}</td>
                     @endif
                     <td>{{ $sell->Unit->actual_name }}</td>
                     <td>{{ $sell->unit_price }}</td>
@@ -165,58 +165,85 @@
             <!-- Add more items as needed -->
         </table>
 
-        <div class="invoice-footer"> 
-    <table> 
-        @if ($settings->display_total_in_invoice) 
-            <tr class="total"> 
-                <td colspan="4" style="font-size: 20px;font-weight: 900; color: #000">الإجمالي</td> 
-                <td>{{ $transaction->total }}</td> 
-            </tr> 
-        @endif 
-        @if ($settings->display_discount_in_invoice) 
-            <tr class="total"> 
-                <td colspan="4" style="font-size: 20px;font-weight: 900; color: #000">الخصم</td> 
-                <td>{{ $transaction->discount_value }}{{ $transaction->discount_type == 'percentage' ? '%' : '' }} 
-                </td> 
-            </tr> 
-        @endif 
-        @if($transaction->tax_amount > 0) 
-        <tr class="total"> 
-            <td colspan="4" style="font-size: 20px;font-weight: 900; color: #000">الضريبة</td> 
-            <td>{{ $transaction->TransactionTaxes->sum('tax_amount') }} ({{ implode('- ', $transaction->TransactionTaxes->pluck('taxRate.name')->toArray()) }})</td> 
-        </tr> 
-        @endif 
-        @if ($settings->display_final_price_in_invoice) 
-            <tr class="total"> 
-                <td colspan="4" style="font-size: 20px;font-weight: 900; color: #000"> الإجمالي بعد الخصم والضريبة</td> 
-                <td>{{ $transaction->final_price }}</td> 
-            </tr> 
-        @endif 
-        @if ($settings->display_credit_details_in_invoice) 
-            @if ($transaction->Contact->credit_limit > 0) 
-                <tr class="total"> 
-                    <td colspan="4" style="font-size: 20px;font-weight: 900; color: #000">المبلغ المستحق من 
-                        قبل</td> 
-                    <td>{{ $totalBeforeDue }}</td> 
-                </tr> 
+        <div class="invoice-footer">
+            <table>
+                @if ($settings->display_total_in_invoice)
+                    <tr class="total">
+                        <td colspan="4" style="font-size: 20px;font-weight: 900; color: #000">الإجمالي</td>
+                        <td>{{ $transaction->total }}</td>
+                    </tr>
+                @endif
+                @php
+                    $paid_from_transaction = $transaction->PaymentsTransaction->sum('amount');
+                    $SumPaymentsForReturnTransactions = $transaction->ReturnTransactions->flatMap->PaymentsTransaction->sum(
+                        'amount',
+                    );
 
-                <tr class="total"> 
-                    <td colspan="4" style="font-size: 20px;font-weight: 900; color: #000">المبلغ المستحق من 
-                        بعد</td> 
+                    $paid_amount = $paid_from_transaction - $SumPaymentsForReturnTransactions;
+                    $remaining_amount = $transaction->final_price - $paid_amount;
+                @endphp
+
+                @if ($paid_amount > 0)
+                    <tr class="total">
+                        <td colspan="4" style="font-size: 20px;font-weight: 900; color: #000">المدفوع</td>
+                        <td>{{ $paid_amount }} </td>
+                    </tr>
+                @endif
+
+                @if ($remaining_amount > 0)
+                    <tr class="total">
+                        <td colspan="4" style="font-size: 20px;font-weight: 900; color: #000">المتبقي</td>
+                        <td>{{ $remaining_amount }} </td>
+                    </tr>
+                @endif
+                @if ($settings->display_discount_in_invoice)
+                    <tr class="total">
+                        <td colspan="4" style="font-size: 20px;font-weight: 900; color: #000">الخصم</td>
+                        <td>{{ $transaction->discount_value }}{{ $transaction->discount_type == 'percentage' ? '%' : '' }}
+                        </td>
+                    </tr>
+                @endif
+                @if ($transaction->tax_amount > 0)
+                    <tr class="total">
+                        <td colspan="4" style="font-size: 20px;font-weight: 900; color: #000">الضريبة</td>
+                        <td>{{ $transaction->TransactionTaxes->sum('tax_amount') }}
+                            ({{ implode('- ', $transaction->TransactionTaxes->pluck('taxRate.name')->toArray()) }})
+                        </td>
+                    </tr>
+                @endif
+                @if ($settings->display_final_price_in_invoice)
+                    <tr class="total">
+                        <td colspan="4" style="font-size: 20px;font-weight: 900; color: #000"> الإجمالي بعد الخصم
+                            والضريبة</td>
+                        <td>{{ $transaction->final_price }}</td>
+                    </tr>
+                @endif
+                @if ($settings->display_credit_details_in_invoice)
+                    @if ($transaction->Contact->credit_limit > 0)
+                        <tr class="total">
+                            <td colspan="4" style="font-size: 20px;font-weight: 900; color: #000">المبلغ المستحق من
+                                قبل</td>
+                            <td>{{ $totalBeforeDue }}</td>
+                        </tr>
+
+                        <tr class="total">
+                            <td colspan="4" style="font-size: 20px;font-weight: 900; color: #000">المبلغ المستحق من
+                                بعد</td>
 
 
-                    <td>{{$toalAfterDue }} 
-                    </td> 
-                </tr> 
-            @endif 
-        @endif 
-    </table> 
-    <div class="alert-section" style="margin-top: 20px; padding: 10px; border: 1px solid #ff0000; background-color: #fff8f8; text-align: center;"> 
-        <p style="font-weight: bold; color: #ff0000; margin: 0;"> 
-            ممنوع رجوع البضاعة بعد 3 ايام من تاريخ اصدار الفاتورة ونحن غير مسؤولين عن سوء التخزين 
-    </p> 
-    </div> 
-</div>
+                            <td>{{ $toalAfterDue }}
+                            </td>
+                        </tr>
+                    @endif
+                @endif
+            </table>
+            <div class="alert-section"
+                style="margin-top: 20px; padding: 10px; border: 1px solid #ff0000; background-color: #fff8f8; text-align: center;">
+                <p style="font-weight: bold; color: #ff0000; margin: 0;">
+                    ممنوع رجوع البضاعة بعد 3 ايام من تاريخ اصدار الفاتورة ونحن غير مسؤولين عن سوء التخزين
+                </p>
+            </div>
+        </div>
     </div>
     {{-- <script>
         window.print()
