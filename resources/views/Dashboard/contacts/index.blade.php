@@ -56,8 +56,8 @@
                           <label for="file">اختار ملف </label>
                           <input type="file" name="file" class="form-control">
                       </div>
-                      
-                  
+
+
                   </div>
                   <div class="modal-footer">
                     <button type="submit" class="btn btn-primary">استيراد</button>
@@ -78,10 +78,10 @@
                     <th>{{ trans('admin.phone') }}</th>
                     <th>{{ trans('admin.address') }}</th>
                     <th>{{ trans('admin.balance') }}</th>
-                    <th>{{ trans('admin.credit_limit') }}</th>
+                    {{-- <th>{{ trans('admin.credit_limit') }}</th>
                     <th>{{ trans('admin.sales_segment_id') }}</th>
                     <th>{{ trans('admin.is_active') }}</th>
-                    <th>{{ trans('admin.Created at') }}</th>
+                    <th>{{ trans('admin.Created at') }}</th> --}}
                     <th>{{ trans('admin.Actions') }}</th>
                 </tr>
                 </thead>
@@ -125,12 +125,12 @@
             {data: 'phone', name: 'phone'},
             {data: 'address', name: 'address'},
             {data: 'balance', name: 'balance'},
-            {data: 'credit_limit', name: 'credit_limit', render: function(data, type, row) {
+            /*{data: 'credit_limit', name: 'credit_limit', render: function(data, type, row) {
                 return data === null ? 'لا يوجد' : data;
             }},
             {data: 'sales_segment_id', name: 'sales_segment_id'},
             {data: 'is_active', name: 'is_active'},
-            {data: 'created_at', name: 'created_at'},
+            {data: 'created_at', name: 'created_at'},*/
             {data: 'action', name: 'action', orderable: false, searchable: false},
         ],
         dom: 'lBfrtip',

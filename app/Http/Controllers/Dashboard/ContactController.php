@@ -83,7 +83,11 @@ class ContactController extends Controller
     public function index(Request $request)
     {
         if ($request->ajax()) {
-            $data = Contact::query()->orderBy('id', 'desc');
+            $data = Contact::query()->orderBy('balance', 'desc');
+
+            if($request->type == 'supplier') {
+                $data = Contact::query()->orderBy('balance');
+            }
 
             if ($request->type)
                 $data->where('type', $request->type);

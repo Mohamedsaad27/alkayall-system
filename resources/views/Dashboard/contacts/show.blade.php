@@ -31,6 +31,7 @@
                 <th>{{ trans('admin.balance') }}</th>
                 <th>{{ trans('admin.opening_balance') }}</th>
                 <th>{{ trans('admin.credit_limit') }}</th>
+                <th>{{ trans('admin.is_active') }}</th>
                 <th>{{ trans('admin.sales_segment_id') }}</th>
                 <th>{{ trans('admin.Created at') }}</th>
             </tr>
@@ -42,6 +43,7 @@
                         <td>{{$contact->balance}}</td>
                         <td>{{$contact->opening_balance}}</td>
                         <td>{{$contact->credit_limit}}</td>
+                        <td>{{$contact->is_active ? "نعم" : "لا"}}</td>
                         <td>{{$contact->salesSegment->name ?? 'لا يوجد شريحة مبيعات'}}</td>
                         <td>{{\Carbon\Carbon::parse($contact->created_at)->format('d-m-Y h:i')}}</td>
                     </tr>
@@ -51,6 +53,6 @@
     </div>
 
     <div class="col-lg-12">
-        
+
     </div>
 </div>
